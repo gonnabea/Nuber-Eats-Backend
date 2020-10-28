@@ -22,8 +22,8 @@ import { IsBoolean, IsString, Length } from "class-validator";
 export class CreateRestaurantDto {
     @Field(type => String)
     @IsString()
-    @Length(5, 10)
-    name: string
+    @Length(5, 10) // 클라이언트가 요청을 할 때 오류 캐치
+    name: string // 코딩할 때 오류 캐치
 
     @Field(type => Boolean)
     @IsBoolean()
