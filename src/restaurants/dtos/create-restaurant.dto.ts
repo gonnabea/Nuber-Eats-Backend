@@ -1,4 +1,5 @@
 import { ArgsType, Field, InputType } from "@nestjs/graphql";
+import { IsBoolean, IsString, Length } from "class-validator";
 
 // DTO: Data Tansfer Object
 
@@ -20,14 +21,19 @@ import { ArgsType, Field, InputType } from "@nestjs/graphql";
 @ArgsType()
 export class CreateRestaurantDto {
     @Field(type => String)
+    @IsString()
+    @Length(5, 10)
     name: string
 
     @Field(type => Boolean)
+    @IsBoolean()
     isVegan: boolean;
 
     @Field(type => String)
+    @IsString()
     address:string;
 
     @Field(type => String)
+    @IsString()
     ownersName: string;
 }
