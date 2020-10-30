@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { Restaurant } from './restaurants/entities/restaurant.entity';
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true, // 모든 경로에서 접근 가능하게
       envFilePath: process.env.NODE_ENV === "dev" ? ".env.dev" : ".env.test",// dotenv 파일 경로
       ignoreEnvFile: process.env.NODE_ENV === "prod", // 배포할 때
-      validationSchema: Joi.object({ //.env 타입체킹
+      validationSchema: Joi.object({ // .env 타입체킹
         NODE_ENV: Joi.string().valid('dev', 'prod').required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.string().required(),
@@ -30,8 +31,9 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      synchronize: true,
+      synchronize: process.env.NODE_ENV !== "prod",
       logging: true,
+      entities: [Restaurant]
     }),
     RestaurantsModule,
   ],
