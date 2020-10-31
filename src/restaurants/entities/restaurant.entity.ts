@@ -9,7 +9,6 @@ export class Restaurant {
     @Field(type => Number)
     id: number
 
-
     @Field(type => String)
     @Column()
     name: string
