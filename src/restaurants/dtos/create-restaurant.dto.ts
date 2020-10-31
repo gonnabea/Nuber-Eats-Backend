@@ -1,4 +1,4 @@
-import { ArgsType, Field, InputType } from "@nestjs/graphql";
+import { ArgsType, Field } from "@nestjs/graphql";
 import { IsBoolean, IsString, Length } from "class-validator";
 
 // DTO: Data Tansfer Object
