@@ -17,10 +17,10 @@ export class RestaurantResolver {
     // @Args('isVegan') isVegan:boolean,
     // @Args('address') address:string,
     // @Args('ownersName') ownerssName:string
-    @Args() createRestaurantInput: CreateRestaurantDto
+    @Args('input') createRestaurantInput: CreateRestaurantDto
     ):Promise<boolean>{
        try{
-        await this.restaurantService.createRestaurant(CreateRestaurantDto)
+        await this.restaurantService.createRestaurant(createRestaurantInput)
         return true
        }catch(e){
            console.log(e)
