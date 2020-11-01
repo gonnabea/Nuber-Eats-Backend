@@ -1,5 +1,5 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
-import { IsBoolean, IsString, Length } from "class-validator";
+import { IsBoolean, IsOptional, IsString, Length } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 // @InputType({ isAbstract: true})
@@ -14,26 +14,19 @@ export class Restaurant {
     @Field(type => String)// 클라이언트가 요청을 할 때 오류 캐치
     @Column()  
     @IsString()
+    @Length(5,10)
     name: string // 코딩할 때 오류 캐치
 
-    @Field(type => Boolean)
-    @Column()
+    @Field(type => Boolean, { nullable: true})
+    @Column({ default: true})
+    @IsOptional()
     @IsBoolean()
-    @Length(5,10)
     isVegan: boolean;
 
-    @Field(type => String)
+    @Field(type => String, {defaultValue: "강남"})
     @Column()
     @IsString()
     address:string;
 
-    @Field(type => String)
-    @Column()
-    @IsString()
-    ownersName: string;
 
-    @Field(type => String)
-    @Column()
-    @IsString()
-    categoryName: string
 }
