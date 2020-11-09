@@ -2,6 +2,24 @@
 
 Nuber Eats 클론 백엔드
 
+## 유저 Entity:
+
+- id
+- createdAt
+- updatedAt
+
+- email
+- password
+- role(client|owner|delivery)
+
+## 유저 CRUD
+
+- Create Account
+- Log In
+- See Profile
+- Edit Profile
+- Verify Email
+
 ## What the heck is the nest js?
 
 ### Description
