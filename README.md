@@ -22,6 +22,8 @@ Nuber Eats 클론 백엔드
 
 ## What the heck is the nest js?
 
+https://docs.nestjs.com/
+
 ### Description
 
 Nest is a framework for building efficient, scalable Node.js server-side applications. It uses modern JavaScript, is built with TypeScript (preserves compatibility with pure JavaScript) and combines elements of OOP (Object Oriented Programming), FP (Functional Programming), and FRP (Functional Reactive Programming).
@@ -47,3 +49,21 @@ js로 프론트, 백엔드 모두 구현 가능한 상황에서
 지금 느낀 바로는 typeorm과 그래프큐엘의 type체킹을 한 번에 해줘서 간편하게 해줌
 
 또한 entity를 컴포넌트화 시켜서 공통된 필드를 선언해줄 수 있음 (재사용성)
+
+well, I think nest makes code very readable, clean, and reusable
+these are what I felt just by now.
+
+0. easy to init project
+1. I like this kind of structure
+   @Module({
+   controllers: [CatsController],
+   providers: [CatsService],
+   })
+   this looks beautiful ! we can see whole structure in a glance, and all that things reusable even in different projects!
+1. One model, One folder <- how simple it is! beautiful architecture.
+   ( in express, MVC model sometimes confused if it's quite huge application)
+1. I believe decorator (@) makes to easier to build routing, get params etc, and It's recognizable by it's name itself is one of the advantages maybe??
+1. also, making "core" entity and import another entity is good approach I think
+   that means that it can be components for just what we want! and this improves productivity
+1. official document is so kind haha but I found nest.js community is not so big yet
+   https://docs.nestjs.com/
