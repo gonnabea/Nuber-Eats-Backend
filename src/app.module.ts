@@ -22,6 +22,8 @@ import { User } from './users/entities/user.entity';
         DB_USERNAME: Joi.string().required(),
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
+        // 토큰을 지정하기 위해 사용하는 프라이빗 키
+        SECRET_KEY: Joi.string().required()
       })
     }),
     GraphQLModule.forRoot({
