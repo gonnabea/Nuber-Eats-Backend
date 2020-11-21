@@ -41,9 +41,9 @@ import { JwtModule } from './jwt/jwt.module';
       logging: process.env.NODE_ENV !== "prod",
       entities: [User]
     }),
+    JwtModule.forRoot(),
     UsersModule,
     CommonModule,
-    JwtModule,
   ],
   controllers: [],
   providers: [],
