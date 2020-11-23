@@ -24,7 +24,7 @@ import { JwtModule } from './jwt/jwt.module';
         DB_PASSWORD: Joi.string().required(),
         DB_NAME: Joi.string().required(),
         // 토큰을 지정하기 위해 사용하는 프라이빗 키
-        SECRET_KEY: Joi.string().required()
+        PRIVATE_KEY: Joi.string().required()
       })
     }),
     GraphQLModule.forRoot({
@@ -41,7 +41,9 @@ import { JwtModule } from './jwt/jwt.module';
       logging: process.env.NODE_ENV !== "prod",
       entities: [User]
     }),
-    JwtModule.forRoot(),
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY
+    }),
     UsersModule,
     CommonModule,
   ],
