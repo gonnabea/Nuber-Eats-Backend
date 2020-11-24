@@ -2,13 +2,13 @@ import { Resolver, Query, Mutation, Args } from "@nestjs/graphql";
 import { CreateAccountInput, CreateAccountOutput } from "./dtos/create-account.dto";
 import { LoginInput, LoginOutput } from "./dtos/login.dto";
 import { User } from "./entities/user.entity";
-import { UsersService } from "./users.service";
+import { UserService } from "./users.service";
 
 
 @Resolver(of => User)
 export class UsersResolver {
     constructor(
-        private readonly usersService: UsersService
+        private readonly userService: UserService
     ){}
 
     @Query(returns => Boolean)
@@ -19,7 +19,7 @@ export class UsersResolver {
     @Mutation(returns => CreateAccountOutput)
     async createAccount(@Args("input") createAccountInput: CreateAccountInput): Promise<CreateAccountOutput> {
         try {
-            return this.usersService.createAccount(createAccountInput)
+            return this.userService.createAccount(createAccountInput)
             
         } catch(error) {
             return {
@@ -33,7 +33,7 @@ export class UsersResolver {
     async login(@Args("input") loginInput: LoginInput): Promise<LoginOutput> {
         try{
             
-            return this.usersService.login(loginInput)
+            return this.userService.login(loginInput)
         } catch(error){
             return {
                 ok: false,

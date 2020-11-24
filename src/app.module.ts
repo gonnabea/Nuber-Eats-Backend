@@ -53,9 +53,8 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer){
-    consumer.apply(JwtMiddleware).forRoutes({
-      path: "/graphql",
-      method: RequestMethod.ALL
-    })
+    consumer.apply(JwtMiddleware)
+    .forRoutes({path:"/graphql", method: RequestMethod.ALL})
+    
   }
 }
