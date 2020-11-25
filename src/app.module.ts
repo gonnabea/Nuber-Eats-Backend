@@ -29,7 +29,9 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
       })
     }),
     GraphQLModule.forRoot({
-      autoSchemaFile: true // 그래프큐엘 스키마 파일 저장경로 (true일 시 따로 생성되지 않는 듯 함)
+      // 그래프큐엘 스키마 파일 저장경로 (true일 시 따로 생성되지 않는 듯 함)
+      autoSchemaFile: true,
+      context: ({req}) => ({user: req['user']})
     }),
     TypeOrmModule.forRoot({
       type: "postgres",
@@ -54,7 +56,7 @@ import { JwtMiddleware } from './jwt/jwt.middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer){
     consumer.apply(JwtMiddleware)
-    .forRoutes({path:"/graphql", method: RequestMethod.ALL})
+    .forRoutes({path:"/graphql", method: RequestMethod.POST})
     
   }
 }
