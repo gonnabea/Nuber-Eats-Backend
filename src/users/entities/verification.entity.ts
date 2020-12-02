@@ -19,7 +19,7 @@ export class Verification extends CoreEntity {
 
     @BeforeInsert()
     createCode(): void {
-        // Math.random().toString(36).substring(2) <- 랜덤문자생성
+        // Math.random().toString(36).substring(2) <- 또다른 랜덤문자 생성방법
         this.code = uuidv4()
     }
 }
