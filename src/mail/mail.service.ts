@@ -12,12 +12,14 @@ export class MailService {
         this.sendEmail("testing", "테스트 이메일입니다!")
     } 
 
-    private async sendEmail(subject: string, content: string){
+    private async sendEmail(subject: string, template: string){
         const form = new FormData()
         form.append("from", `Excited User <mailgun@${this.options.domain}>`)
         form.append("to", 'awesomedev3@gmail.com')
         form.append("subject", subject)
-        form.append("text", content)
+        form.append("template", template)
+        form.append("v:code", "whatever")
+        form.append("v:username", "Jiwon!!")
         const response = await got(`https://api.mailgun.net/v3/${this.options.domain}/messages`, {
             headers: {
                 "Authorization": `Basic ${Buffer.from(`api:${this.options.apiKey}`).toString("base64")}`
