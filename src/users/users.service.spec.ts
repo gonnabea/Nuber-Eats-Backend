@@ -55,15 +55,28 @@ describe("UserService", () => {
         usersRepository = module.get(getRepositoryToken(User))
     })
 
-    usersRepository.
-
     it("should be defined", () => {
         expect(service).toBeDefined()
     })
 
    describe('createAccount', () => {
 
-    it("should fail if user exist", () => {})
+    it("should fail if user exist", async() => {
+       usersRepository.findOne.mockResolvedValue({
+           id: 1,
+           email: "dsfasdfadsff"
+       })
+    const result = await service.createAccount({
+           email:"",
+           password:"",
+           role:0
+       })
+       expect(result).toMatchObject({
+           ok: false,
+           error: "There is a user with that email already."
+       })
+    })
+
 
    })
 
