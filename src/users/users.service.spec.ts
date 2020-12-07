@@ -28,7 +28,8 @@ describe("UserService", () => {
 
     let service: UserService;
     let usersRepository: mockRepository<User>
-    let verificationRepository: mockRepository<Verification>
+    let verificationsRepository: mockRepository<Verification>
+    let mailService: MailService
     beforeAll(async () => {
 
         const module = await Test.createTestingModule({
@@ -53,7 +54,8 @@ describe("UserService", () => {
         }).compile()
         service = module.get<UserService>(UserService)
         usersRepository = module.get(getRepositoryToken(User))
-        verificationRepository = module.get(getRepositoryToken(Verification))
+        verificationsRepository = module.get(getRepositoryToken(Verification))
+        mailService = module.get<MailService>(MailService)
     })
 
     it("should be defined", () => {
@@ -79,13 +81,31 @@ describe("UserService", () => {
        })
     })
     it('should create a new user', async() => {
+
         usersRepository.findOne.mockResolvedValue(undefined)
         usersRepository.create.mockReturnValue(createAccountArgs)
-        await service.createAccount(createAccountArgs)
+        usersRepository.save.mockResolvedValue(createAccountArgs)
+        verificationsRepository.create.mockReturnValue({
+            user: createAccountArgs
+        })
+        verificationsRepository.save.mockResolvedValue({
+            code: "code"
+        })
+        const result = await service.createAccount(createAccountArgs)
         expect(usersRepository.create).toHaveBeenCalledTimes(1)
         expect(usersRepository.create).toHaveBeenCalledWith(createAccountArgs)
         expect(usersRepository.save).toHaveBeenCalledTimes(1)
         expect(usersRepository.save).toHaveBeenCalledWith(createAccountArgs)
+        expect(verificationsRepository.create).toHaveBeenCalledTimes(1)
+        expect(verificationsRepository.create).toHaveBeenCalledWith({user:createAccountArgs})
+
+        expect(verificationsRepository.save).toHaveBeenCalledTimes(1)
+        expect(verificationsRepository.save).toHaveBeenCalledWith({
+            user: createAccountArgs
+        })
+        expect(mailService.sendVerificationEmail).toHaveBeenCalledTimes(1)
+        expect(mailService.sendVerificationEmail).toHaveBeenCalledWith(expect.any(String),expect.any(String))
+        expect(result).toEqual({ok:true})
     })
  
    })
