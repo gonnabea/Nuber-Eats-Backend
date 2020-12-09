@@ -8,13 +8,13 @@ import { LoginInput, LoginOutput } from "./dtos/login.dto";
 import { UserProfileInput, UserProfileOutput } from "./dtos/user-profile.dto";
 import { VerifyEmailInput, VerifyEmailOutput } from "./dtos/verify-email.dto";
 import { User } from "./entities/user.entity";
-import { UserService } from "./users.service";
+import { UsersService } from "./users.service";
 
 
 @Resolver(of => User)
 export class UsersResolver {
     constructor(
-        private readonly userService: UserService
+        private readonly userService: UsersService
     ){}
 
     @Mutation(returns => CreateAccountOutput)

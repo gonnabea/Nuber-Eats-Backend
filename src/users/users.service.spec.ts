@@ -6,7 +6,7 @@ import { MailService } from "src/mail/mail.service";
 import { Repository } from "typeorm";
 import { User } from "./entities/user.entity";
 import { Verification } from "./entities/verification.entity";
-import { UserService } from "./users.service"
+import { UsersService } from "./users.service"
 
 const mockRepository = () => ({
     findOne: jest.fn(),
@@ -28,7 +28,7 @@ type mockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>
 
 describe("UserService", () => {
 
-    let service: UserService;
+    let service: UsersService;
     let usersRepository: mockRepository<User>
     let verificationsRepository: mockRepository<Verification>
     let mailService: MailService
@@ -37,7 +37,7 @@ describe("UserService", () => {
 
         const module = await Test.createTestingModule({
             providers: [
-                UserService, {
+                UsersService, {
                     provide: getRepositoryToken(User), 
                     useValue: mockRepository()
                 },
@@ -55,7 +55,7 @@ describe("UserService", () => {
                 }
             ]
         }).compile()
-        service = module.get<UserService>(UserService)
+        service = module.get<UsersService>(UsersService)
         usersRepository = module.get(getRepositoryToken(User))
         jwtService = module.get<JwtService>(JwtService)
         mailService = module.get<MailService>(MailService)
@@ -184,6 +184,40 @@ describe("UserService", () => {
     
     describe('editProfile', () => {
         
+
+        it("should change email", async() => {
+
+            const oldUser = {
+                email: "bs@old.com",
+                verified: true
+            }
+            const editProfileArgs = {
+                userId:1,
+                input:{email: "bs@new.com"}
+            }
+            const newVerification = {
+                code:"code"
+            }
+            const newUser = {
+                verified: false,
+                email: editProfileArgs.input.email,
+                
+            }
+
+
+            usersRepository.findOne.mockResolvedValue(oldUser)
+            verificationsRepository.create.mockReturnValue(newVerification)
+            verificationsRepository.save.mockResolvedValue(newVerification)
+
+            await service.editProfile(editProfileArgs.userId,editProfileArgs.input)
+            expect(usersRepository.findOne).toHaveBeenCalledTimes(1)
+            expect(usersRepository.findOne).toHaveBeenCalledWith(editProfileArgs.userId)
+            expect(verificationsRepository.create).toHaveBeenCalledWith({user:newUser})
+            expect(verificationsRepository.save).toHaveBeenCalledWith(newVerification)
+
+            expect(mailService.sendVerificationEmail).toHaveBeenCalledWith(newUser.email, newVerification.code)
+        })
+
     })
     
     it.todo('verifyEmail')
