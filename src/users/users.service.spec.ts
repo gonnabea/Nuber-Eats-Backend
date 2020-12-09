@@ -4,6 +4,7 @@ import { JwtModule } from "src/jwt/jwt.module";
 import { JwtService } from "src/jwt/jwt.service";
 import { MailService } from "src/mail/mail.service";
 import { Repository } from "typeorm";
+import { EditProfileInput } from "./dtos/edit-profile.dto";
 import { User } from "./entities/user.entity";
 import { Verification } from "./entities/verification.entity";
 import { UsersService } from "./users.service"
@@ -218,6 +219,27 @@ describe("UserService", () => {
             expect(mailService.sendVerificationEmail).toHaveBeenCalledWith(newUser.email, newVerification.code)
         })
 
+
+        it("should change password", async() => {
+            const editProfileArgs = {
+                userId:1,
+                input:{password: "new.password"}
+            }
+            usersRepository.findOne.mockResolvedValue({password:"old.password"})
+            const result = await service.editProfile(editProfileArgs.userId, editProfileArgs.input)
+            expect(usersRepository.save).toHaveBeenCalledTimes(1)
+            expect(usersRepository.save).toHaveBeenCalledWith(editProfileArgs.input)
+            expect(result).toEqual({ ok: true })
+        })
+
+        it("should fail on exception", async() => {
+            usersRepository.findOne.mockRejectedValue(new Error())
+            const result = await service.editProfile(1, {email: "12"})
+            expect(result).toEqual({
+                ok: false,
+                error: "Could not update profile."
+            })
+        })
     })
     
     it.todo('verifyEmail')
