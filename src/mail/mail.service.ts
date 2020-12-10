@@ -12,7 +12,7 @@ export class MailService {
     ) {
     } 
 
-    private async sendEmail(subject: string, template: string, emailVars: EmailVar[] ){
+    async sendEmail(subject: string, template: string, emailVars: EmailVar[] ){
         const form = new FormData()
         form.append("from", `Jiwon from Nuber Eats <mailgun@${this.options.domain}>`)
         form.append("to", 'awesomedev3@gmail.com')
