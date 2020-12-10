@@ -140,6 +140,16 @@ describe("UserService", () => {
                 error: "User not found"
             })
         })
+
+        it("should fail if there's an error", async () => {
+            usersRepository.findOne.mockReturnValue(new Error());
+            const result = await service.login(loginArgs)
+            expect(result).toEqual({
+                ok: false,
+                error: "There's an login Error.",
+                
+            })
+        })
         
         it("should fail if the password is wrong", async() => {
             const mockedUser = {
