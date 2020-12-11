@@ -67,3 +67,8 @@ these are what I felt just by now.
    that means that it can be components for just what we want! and this improves productivity
 1. official document is so kind haha but I found nest.js community is not so big yet
    https://docs.nestjs.com/
+
+## Custom By Jiwon
+
+- [ ] 음성통화
+- [ ] three.js 이펙트 넣어보기

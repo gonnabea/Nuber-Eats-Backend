@@ -18,6 +18,7 @@ export class MailService {
         form.append("to", 'awesomedev3@gmail.com')
         form.append("subject", subject)
         form.append("template", template)
+        // 과제: 테스트되지 않은 함수 스스로 테스트해보기.
         emailVars.forEach(eVar => form.append(`v:${eVar.key}`, eVar.value))
         try{
             await got.post(`https://api.mailgun.net/v3/${this.options.domain}/messages`, {

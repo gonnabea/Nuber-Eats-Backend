@@ -21,7 +21,7 @@ import { MailModule } from './mail/mail.module';
       envFilePath: process.env.NODE_ENV === "dev" ? ".env.dev" : ".env.test",// dotenv 파일 경로
       ignoreEnvFile: process.env.NODE_ENV === "prod", // 배포할 때
       validationSchema: Joi.object({ // .env 타입체킹
-        NODE_ENV: Joi.string().valid('dev', 'prod').required(),
+        NODE_ENV: Joi.string().valid('dev', 'prod', 'test').required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
@@ -48,7 +48,7 @@ import { MailModule } from './mail/mail.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       synchronize: process.env.NODE_ENV !== "prod",
-      logging: process.env.NODE_ENV !== "prod",
+      logging: process.env.NODE_ENV !== "prod" && process.env.NODE_ENV !== "test",
       entities: [User, Verification]
     }),
     JwtModule.forRoot({
