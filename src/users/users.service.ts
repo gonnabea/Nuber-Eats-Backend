@@ -5,7 +5,7 @@ import { CreateAccountInput } from "./dtos/create-account.dto";
 import { LoginInput } from "./dtos/login.dto";
 import { User } from "./entities/user.entity";
 import { JwtService } from "src/jwt/jwt.service";
-import { EditProfileInput } from "./dtos/edit-profile.dto";
+import { EditProfileInput, EditProfileOutput } from "./dtos/edit-profile.dto";
 import { Verification } from "./entities/verification.entity";
 import { VerifyEmailOutput } from "./dtos/verify-email.dto";
 import { UserProfileOutput } from "./dtos/user-profile.dto";
@@ -90,12 +90,13 @@ export class UsersService {
         }
     }
 
-    async editProfile(userId: number, {email,password}: EditProfileInput) {
+    async editProfile(userId: number, {email,password}: EditProfileInput): Promise<EditProfileOutput> {
         try{
             const user = await this.users.findOne(userId)
             if(email){
                 user.email = email
                 user.verified = false;
+                await this.verification.delete({user: {id: user.id}})
                 const verification = await this.verification.save(this.verification.create({user}))
 
                 this.mailService.sendVerificationEmail(user.email,verification.code)

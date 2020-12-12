@@ -19,7 +19,8 @@ registerEnumType(UserRole, {name: "UserRole"})
 @Entity()
 export class User extends CoreEntity {
 
-    @Column()
+    // 기조 유저가 사용 중인 이메일 중복 방지
+    @Column({ unique: true })
     @Field(type => String)
     @IsEmail()
     email: string;
