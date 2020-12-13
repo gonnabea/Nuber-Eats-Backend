@@ -10,15 +10,20 @@ import { Restaurant } from "./restaurant.entity";
 export class Category extends CoreEntity {
 
     @Field(type => String)// 클라이언트가 요청을 할 때 오류 캐치
-    @Column()  
+    @Column({unique: true})  
     @IsString()
     @Length(5,10)
     name: string // 코딩할 때 오류 캐치
 
-    @Field(type => String)
-    @Column()
+    @Field(type => String, {nullable: true})
+    @Column({ nullable: true})
     @IsString()
     coverImg: string;
+
+    @Field(type => String)
+    @Column({unique: true})
+    @IsString()
+    slug: string
 
     @Field(type => [Restaurant])
     @OneToMany(type => Restaurant, restaurant => restaurant.category)

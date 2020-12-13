@@ -19,7 +19,7 @@ export class Restaurant extends CoreEntity {
     @Field(type => String)
     @Column()
     @IsString()
-    bgImage: string;
+    coverImg: string;
 
     @Field(type => String, {defaultValue: "강남"})
     @Column()
@@ -33,4 +33,5 @@ export class Restaurant extends CoreEntity {
     @Field(type => User)
     @ManyToOne(type => User, user => user.restaurants)
     owner: User;
+
 }
