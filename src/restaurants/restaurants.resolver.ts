@@ -29,7 +29,7 @@ export class RestaurantResolver {
     @Role(["Owner"])
     editRestaurant(
         @AuthUser() authUser: User,
-        @Args('input') EditRestaurantInput: EditRestaurantInput
+        @Args('input') editRestaurantInput: EditRestaurantInput
     ): EditRestaurantOutput {
         return {
             ok: true
