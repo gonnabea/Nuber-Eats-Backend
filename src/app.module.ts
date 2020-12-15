@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 
 import { UsersModule } from './users/users.module';
-import { CommonModule } from './common/common.module';
 import { User } from './users/entities/user.entity';
 import { JwtModule } from './jwt/jwt.module';
 import { JwtMiddleware } from './jwt/jwt.middleware';
@@ -62,10 +61,10 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
       domain:process.env.MAILGUN_DOMAIN_NAME,
       fromEmail:process.env.MAILGUN_FROM_EMAIL,
     }),
+    AuthModule,
     UsersModule,
     RestaurantsModule,
-    AuthModule,
-    MailModule,
+    
   ],
   controllers: [],
   providers: [],

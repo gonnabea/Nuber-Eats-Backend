@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateRestaurantInput, CreateRestaurantOutput } from "./dtos/create-restaurant.dto";
+import { EditRestaurantOutput } from "./dtos/edit-restaurant.dto";
 import { Category } from "./entities/category.entity";
 import { Restaurant } from "./entities/restaurant.entity";
 
@@ -41,4 +42,8 @@ export class RestaurantService {
         }
     }
 
+
+    async editRestaurant(owner: User, editRestaurantInput: EditRestaurantInput) :Promise<EditRestaurantOutput> {
+
+    }
 }
