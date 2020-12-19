@@ -9,6 +9,7 @@ import { Column, Entity, ManyToOne } from "typeorm";
 @Entity()
 export class OrderItem extends CoreEntity {
 
+    @Field()
     @ManyToOne( type => Dish, {nullable: true, onDelete:"CASCADE"})
     dish: Dish;
     
