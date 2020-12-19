@@ -36,9 +36,9 @@ export class Order extends CoreEntity {
     @JoinTable()
     dishes: Dish[]
 
-    @Column()
-    @Field(type => Float)
-    total: number
+    @Column({nullable: true})
+    @Field(type => Float, {nullable: true})
+    total?: number // 총 결제금액
 
     @Column({type:"enum", enum: OrderStatus})
     @Field(type => OrderStatus)
