@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { ok } from "assert";
 import { User } from "src/users/entities/user.entity";
 import { Like, Raw, Repository } from "typeorm";
 import { AllCategoriesOutput } from "./dtos/all-categirues,dto";
@@ -12,6 +13,7 @@ import { RestaurantInput, RestaurantOutput } from "./dtos/restaurant.dto";
 import { RestaurantsInput, RestaurantsOutput } from "./dtos/restaurants.dto";
 import { SearchRestaurantInput, SearchRestaurantOutput } from "./dtos/search-restaurant.dto";
 import { Category } from "./entities/category.entity";
+import { Dish } from "./entities/dish.entity";
 import { Restaurant } from "./entities/restaurant.entity";
 import { CategoryRepository } from "./repositories/category.repository";
 
@@ -20,6 +22,8 @@ export class RestaurantService {
     constructor(
     @InjectRepository(Restaurant) 
     private readonly restaurants: Repository<Restaurant>,
+    @InjectRepository(Dish) 
+    private readonly dishes: Repository<Dish>,
     private readonly categories: CategoryRepository
     ){}
     
@@ -225,9 +229,37 @@ export class RestaurantService {
         }
 
         // 그래프큐엘에 나타나지 않는 이유는?
-        async createDish(owner: User, createDishInput: CreateDishInput): Promise<CreateDishOutput> {
-            return {
-                ok: false
+        async createDish(
+            owner: User, 
+            createDishInput: CreateDishInput
+            ): Promise<CreateDishOutput> {
+        try{
+            const restaurant = await this.restaurants.findOne(
+                createDishInput.restaurantId
+            )
+            if(!restaurant) {
+                return {
+                    ok: false,
+                    error: "Restaurant not found"
+                }
             }
+            if(owner.id !== restaurant.ownerId) {
+                return {
+                    ok: false,
+                    error: "You can't do that."
+                }
+            }
+
+           await this.dishes.save(this.dishes.create({...createDishInput, restaurant}))
+           return {
+                ok: true
+            }
+        } catch(error) {
+            console.log(error)
+            return {
+                ok: false,
+                error: "Could not create dish"
+            }
+        }
         }
 }
