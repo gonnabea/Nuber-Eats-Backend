@@ -10,7 +10,7 @@ import { Order } from "./entities/order.entity";
 export class OrderService {
     constructor(
         @InjectRepository(Order)
-        private readonly order: Repository<Order>,
+        private readonly orders: Repository<Order>,
         @InjectRepository(Restaurant)
         private readonly restaurant: Repository<Restaurant>
     ) {}
@@ -23,6 +23,11 @@ export class OrderService {
                 error: "Restaurant not found"
             }
         }
+        const order = await this.orders.save(this.orders.create({
+            customer,
+            restaurant
+        }))
+        console.log(order)
     }
 
 }

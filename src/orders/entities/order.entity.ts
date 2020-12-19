@@ -29,9 +29,9 @@ export class Order extends CoreEntity {
     @ManyToOne(type => User, user => user.rides, {onDelete: 'SET NULL', nullable: true})
     driver?: User
 
-    @Field(type => Restaurant)
+    @Field(type => Restaurant, {nullable: true})
     @ManyToOne(type => Restaurant, Restaurant => Restaurant.orders, {onDelete: 'SET NULL', nullable: true})
-    restaurant: Restaurant
+    restaurant?: Restaurant
 
     @Field(type => [OrderItem])
     @ManyToMany( type => OrderItem)
@@ -43,7 +43,7 @@ export class Order extends CoreEntity {
     @IsNumber()
     total?: number // 총 결제금액
 
-    @Column({type:"enum", enum: OrderStatus})
+    @Column({type:"enum", enum: OrderStatus, default:OrderStatus.Pending})
     @Field(type => OrderStatus)
     @IsEnum(OrderStatus)
     status: OrderStatus
