@@ -7,7 +7,7 @@ import { User } from "src/users/entities/user.entity";
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from "typeorm";
 import { OrderItem } from "./order-item.entity";
 
-enum OrderStatus {
+export enum OrderStatus {
     Pending = "Pending",
     Cooking = "Cooking",
     PickedUp = "PickedUp",
