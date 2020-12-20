@@ -9,7 +9,10 @@ import { OrderItem } from "./order-item.entity";
 
 export enum OrderStatus {
     Pending = "Pending",
+    // 레스토랑이 변경할 수 있는 상태
     Cooking = "Cooking",
+    Cooked = "Cooked",
+    // 배달원이 변경할 수 있는 상태
     PickedUp = "PickedUp",
     Delivered = "Delivered"
 }
