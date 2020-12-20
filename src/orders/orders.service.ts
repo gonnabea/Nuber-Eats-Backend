@@ -1,10 +1,12 @@
 import { Injectable } from "@nestjs/common";
+import { PickType } from "@nestjs/graphql";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Dish } from "src/restaurants/entities/dish.entity";
 import { Restaurant } from "src/restaurants/entities/restaurant.entity";
 import { User, UserRole } from "src/users/entities/user.entity";
 import { Repository } from "typeorm";
 import { CreateOrderInput, CreateOrderOutput } from "./dtos/create-order.dto";
+import { GetOrderInput, GetOrderOutput } from "./dtos/get-order.dto";
 import { GetOrdersInput, GetOrdersOutput } from "./dtos/get-orders.dto";
 import { OrderItem, OrderItemOption } from "./entities/order-item.entity";
 import { Order } from "./entities/order.entity";
@@ -100,23 +102,27 @@ export class OrdersService {
             let orders: Order[]
             if(user.role === UserRole.Client) {
                 orders = await this.orders.find({where: {
-                    customer: user
+                    customer: user,
+                    ...(status && { status })
                 }})
             } else if(user.role === UserRole.Delivery) {
                 orders = await this.orders.find({where: {
-                    driver: user
+                    driver: user,
+                    ...(status && { status })
                 }})
             } else if(user.role === UserRole.Owner) {
                 const restaurants = await this.restaurant.find({where: {
-                    owner: user
+                    owner: user,
+                    ...(status && { status })
                 },
                 relations: ['orders']
             })
             orders = restaurants.map(restaurant => restaurant.orders).flat(1)
-    
+            if(status){
+                orders = orders.filter(order => order.status === status)
+            }
         }
-        
-                return {
+       return {
                     ok: true,
                     orders
                 }
@@ -127,6 +133,46 @@ export class OrdersService {
             }
         }
 
+    }
+
+    async getOrder(user:User, {id:orderId}:GetOrderInput): Promise<GetOrderOutput> {
+        try {
+        const order = await this.orders.findOne(orderId,{ relations:["restaurant"]})
+        if(!order) {
+            return {
+                ok: false,
+                error: "Order not found"
+            }
+        }
+        let canSee = true
+        if(user.role === UserRole.Client && order.customerId !== user.id) {
+            canSee = false
+        }
+
+        if (user.role === UserRole.Delivery && order.driverId !== user.id) {
+            canSee = false
+        }
+        if (user.role === UserRole.Owner && order.restaurant.ownerId !== user.id) {
+            canSee = false 
+        }
+
+        if(!canSee) {
+            return {
+                ok: false,
+                error: "You cant see that"
+            }
+        }
+        
+        return {
+            ok: true,
+            order
+        }
+    } catch {
+        return {
+            ok: false,
+            error: "Could not load order."
+        }
+    }
     }
 }
 
