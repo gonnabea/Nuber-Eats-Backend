@@ -48,6 +48,12 @@ export class OrderResolver {
         return this.ordersService.editOrder(user, editOrderInput)
     }
 
+    @Mutation(returns => Boolean)
+    potatoReady() {
+        pubsub.publish("event", {orderSubScription: "ready"})
+        return true
+    }
+
     @Subscription(returns => String)
     orderSubScription() {
         return pubsub.asyncIterator("event")

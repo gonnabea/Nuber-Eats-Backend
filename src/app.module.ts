@@ -46,8 +46,12 @@ import { OrderItem } from './orders/entities/order-item.entity';
       // 그래프큐엘 스키마 파일 저장경로 (true일 시 따로 생성되지 않는 듯 함)
       autoSchemaFile: true,
       // WTF
-      context: ({req}) => {
-        return {user: req['user']}
+      context: ({req, connection}) => {
+        if(req) {
+          return {user: req['user']}
+        } else {
+          console.log(connection)
+        }
       }
     }),
     TypeOrmModule.forRoot({
