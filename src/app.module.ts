@@ -41,10 +41,14 @@ import { OrderItem } from './orders/entities/order-item.entity';
       })
     }),
     GraphQLModule.forRoot({
+      // 웹소켓 서버 적용
+      installSubscriptionHandlers: true,
       // 그래프큐엘 스키마 파일 저장경로 (true일 시 따로 생성되지 않는 듯 함)
       autoSchemaFile: true,
       // WTF
-      context: ({req}) => ({user: req['user']})
+      context: ({req}) => {
+        return {user: req['user']}
+      }
     }),
     TypeOrmModule.forRoot({
       type: "postgres",
