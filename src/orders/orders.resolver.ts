@@ -55,7 +55,9 @@ export class OrderResolver {
     }
 
     @Subscription(returns => String)
-    orderSubScription() {
+    @Role(["Any"])
+    orderSubScription(@AuthUser() user:User) {
+        console.log(user)
         return pubsub.asyncIterator("event")
     }
 }
