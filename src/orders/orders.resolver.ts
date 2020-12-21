@@ -56,15 +56,14 @@ export class OrderResolver {
   }
 
   @Mutation(returns => Boolean)
-  potatoReady() {
-    this.pubSub.publish('event', { orderSubScription: 'ready' });
+  async potatoReady(@Args('potatoId') potatoId: number) {
+    await this.pubSub.publish('event', { readyPotato: 'ready' });
     return true;
   }
 
   @Subscription(returns => String)
   @Role(['Any'])
-  orderSubScription(@AuthUser() user: User) {
-    console.log(user);
+  readyPotato(@Args('potatoId') potatoId: number) {
     return this.pubSub.asyncIterator('event');
   }
 }
