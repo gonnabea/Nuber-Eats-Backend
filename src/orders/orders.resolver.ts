@@ -56,10 +56,14 @@ export class OrderResolver {
   }
 
   @Subscription(returns => Order, {
-    filter: (payload, _, context) => {
-      console.log(payload);
-      return true;
+    // 소켓에서 룸 개념: true 리터 시 해당하는 룸으로 인식됨
+    // payload, variables, context
+    filter: ({ pendingOrders: { ownerId } }, _, { user }) => {
+      console.log(ownerId, user.id);
+      return ownerId === user.id;
     },
+    // 실제로 클라이언트에게 보낼 데이터
+    resolve: ({ pendingOrders: { order } }) => order,
   })
   @Role(['Owner'])
   pendingOrders() {
