@@ -39,6 +39,11 @@ export class PaymentService {
           error: 'You are not allowed to do this.',
         };
       }
+      restaurant.isPromoted = true;
+      const date = new Date();
+      date.setDate(date.getDate() + 7);
+      restaurant.promotedUntil = date;
+      this.restaurants.save(restaurant);
       await this.payments.save(
         this.payments.create({
           transactionId,
@@ -71,26 +76,26 @@ export class PaymentService {
       };
     }
   }
-  // xx분 30초마다
-  @Cron('30 * * * * *', {
-    name: 'myJob',
-  })
-  checkForPayments() {
-    console.log('Cheking for payment (cron)');
-    const job = this.schedulerRegistry.getCronJob('myJob');
-    console.log(job);
-    job.stop();
-  }
+  //   // xx분 30초마다
+  //   @Cron('30 * * * * *', {
+  //     name: 'myJob',
+  //   })
+  //   checkForPayments() {
+  //     console.log('Cheking for payment (cron)');
+  //     const job = this.schedulerRegistry.getCronJob('myJob');
+  //     console.log(job);
+  //     job.stop();
+  //   }
 
-  // 30초마다
-  @Interval(30000)
-  checkForPayments2() {
-    console.log('Cheking for payment (interval)');
-  }
+  //   // 30초마다
+  //   @Interval(30000)
+  //   checkForPayments2() {
+  //     console.log('Cheking for payment (interval)');
+  //   }
 
-  // 20초 후에 한 번 실행
-  @Timeout(20000)
-  checkForPayments3() {
-    console.log('Cheking for payment (timeout)');
-  }
+  //   // 20초 후에 한 번 실행
+  //   @Timeout(20000)
+  //   checkForPayments3() {
+  //     console.log('Cheking for payment (timeout)');
+  //   }
 }
