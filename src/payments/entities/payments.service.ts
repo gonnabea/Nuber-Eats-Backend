@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Cron, Interval, SchedulerRegistry, Timeout } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Restaurant } from 'src/restaurants/entities/restaurant.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -17,6 +18,7 @@ export class PaymentService {
     private readonly payments: Repository<Payment>,
     @InjectRepository(Restaurant)
     private readonly restaurants: Repository<Restaurant>,
+    private schedulerRegistry: SchedulerRegistry,
   ) {}
 
   async createpayment(
@@ -68,5 +70,27 @@ export class PaymentService {
         error: 'Could not load payments.',
       };
     }
+  }
+  // xx분 30초마다
+  @Cron('30 * * * * *', {
+    name: 'myJob',
+  })
+  checkForPayments() {
+    console.log('Cheking for payment (cron)');
+    const job = this.schedulerRegistry.getCronJob('myJob');
+    console.log(job);
+    job.stop();
+  }
+
+  // 30초마다
+  @Interval(30000)
+  checkForPayments2() {
+    console.log('Cheking for payment (interval)');
+  }
+
+  // 20초 후에 한 번 실행
+  @Timeout(20000)
+  checkForPayments3() {
+    console.log('Cheking for payment (timeout)');
   }
 }
