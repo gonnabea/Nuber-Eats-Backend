@@ -45,6 +45,7 @@ export class RestaurantService {
     owner: User,
     createRestaurantInput: CreateRestaurantInput,
   ): Promise<CreateRestaurantOutput> {
+    console.log(owner);
     try {
       const newRestaurant = this.restaurants.create(createRestaurantInput);
       newRestaurant.owner = owner;
@@ -210,6 +211,7 @@ export class RestaurantService {
         order: {
           isPromoted: 'DESC',
         },
+        relations: ['category', 'owner'],
       });
       return {
         ok: true,

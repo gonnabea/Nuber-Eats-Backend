@@ -42,7 +42,7 @@ export class Restaurant extends CoreEntity {
   )
   category: Category;
 
-  @Field(type => User)
+  @Field(type => User, {nullable: true})
   @ManyToOne(
     type => User,
     user => user.restaurants,
